@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ARS — Annual Report Summarizer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;1,9..144,300&family=DM+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* ── Design Tokens ── */
+      :root {
+        --bg:           #0d1117;
+        --bg-card:      #161b22;
+        --bg-hover:     #1c2330;
+        --bg-input:     #0d1117;
+        --border:       #30363d;
+        --border-light: #21262d;
+        --accent:       #58a6ff;
+        --accent-dim:   #1f3a5f;
+        --emerald:      #3fb950;
+        --emerald-dim:  #1a3a26;
+        --amber:        #d29922;
+        --amber-dim:    #3a2e12;
+        --red:          #f85149;
+        --red-dim:      #3d1a1a;
+        --text:         #e6edf3;
+        --text-muted:   #7d8590;
+        --text-dim:     #484f58;
+        --radius:       10px;
+        --radius-sm:    6px;
+        --shadow:       0 8px 32px rgba(0,0,0,0.4);
+        --shadow-sm:    0 2px 8px rgba(0,0,0,0.3);
+        --font-body:    'DM Sans', sans-serif;
+        --font-brand:   'Fraunces', serif;
+        --font-mono:    'DM Mono', monospace;
+        --transition:   0.18s ease;
+      }
+
+      /* ── Reset & Base ── */
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+      html, body, #root {
+        height: 100%;
+        background: var(--bg);
+        color: var(--text);
+        font-family: var(--font-body);
+        font-size: 15px;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      /* ── Scrollbar ── */
+      ::-webkit-scrollbar { width: 6px; height: 6px; }
+      ::-webkit-scrollbar-track { background: transparent; }
+      ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+      ::-webkit-scrollbar-thumb:hover { background: var(--text-dim); }
+
+      /* ── Typography ── */
+      h1, h2, h3, h4 { font-weight: 600; letter-spacing: -0.02em; }
+      a { color: var(--accent); text-decoration: none; }
+      a:hover { text-decoration: underline; }
+
+      /* ── Utility classes ── */
+      .brand { font-family: var(--font-brand); font-style: italic; }
+      .mono  { font-family: var(--font-mono); }
+      .muted { color: var(--text-muted); }
+
+      /* ── Button base ── */
+      button {
+        font-family: var(--font-body);
+        cursor: pointer;
+        border: none;
+        outline: none;
+        transition: all var(--transition);
+      }
+      button:disabled { opacity: 0.45; cursor: not-allowed; }
+
+      /* ── Input base ── */
+      input, select, textarea {
+        font-family: var(--font-body);
+        background: var(--bg-input);
+        color: var(--text);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        padding: 8px 12px;
+        font-size: 14px;
+        outline: none;
+        transition: border-color var(--transition);
+      }
+      input:focus, select:focus, textarea:focus {
+        border-color: var(--accent);
+      }
+
+      /* ── Fade-in animation ── */
+      @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(12px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to   { opacity: 1; }
+      }
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+      .fade-up { animation: fadeUp 0.35s ease both; }
+      .fade-in { animation: fadeIn 0.25s ease both; }
+
+      /* ── Spinner ── */
+      .spinner {
+        width: 18px; height: 18px;
+        border: 2px solid var(--border);
+        border-top-color: var(--accent);
+        border-radius: 50%;
+        animation: spin 0.7s linear infinite;
+        display: inline-block;
+      }
+
+      /* ── Tag/Badge pill ── */
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 500;
+      }
+
+      /* ── Divider ── */
+      .divider {
+        height: 1px;
+        background: var(--border-light);
+        margin: 20px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
