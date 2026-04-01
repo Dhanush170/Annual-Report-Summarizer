@@ -1,187 +1,190 @@
-## Annual Report Summarizer (ARS)
+<div align="center">
 
-Annual Report Summarizer is a full-stack AI application that ingests annual report PDFs, generates section-wise summaries, and enables deeper analysis through translation, audio playback, cross-year comparison, and report-grounded chat.
+# Annual Report Summarizer
 
-The project is split into:
+**Transform dense financial PDFs into actionable intelligence — in seconds.**
 
-- `backend` (FastAPI + LangChain + ChromaDB)
-- `frontend` (React + Vite)
+[![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
+[![React](https://img.shields.io/badge/React_18-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org)
+[![LangChain](https://img.shields.io/badge/LangChain-1C3C3C?style=for-the-badge&logo=langchain&logoColor=white)](https://langchain.com)
+[![ChromaDB](https://img.shields.io/badge/ChromaDB-FF6F61?style=for-the-badge)](https://www.trychroma.com)
+[![Groq](https://img.shields.io/badge/Groq_LLM-F55036?style=for-the-badge)](https://groq.com)
+[![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev)
 
----
-
-## What This Project Does
-
-After uploading a company annual report PDF for a specific year, ARS can:
-
-- Extract and chunk report content
-- Build and persist vector embeddings for retrieval
-- Generate summaries across eight annual report sections
-- Re-summarize a report later without re-uploading the PDF
-- Compare two report years and generate delta insights
-- Translate summaries to multiple languages
-- Generate audio narration (section-level or full report)
-- Answer follow-up questions in a contextual chat session
+</div>
 
 ---
 
-## Core Features
+## ✦ What is ARS?
 
-1. Authentication
-- Local sign-up/sign-in with JWT
-- Google OAuth sign-in
-- Session restore and route protection in frontend
+> *ARS is a full-stack AI application that ingests annual report PDFs and turns them into structured summaries, multilingual translations, audio narrations, cross-year comparisons, and a contextual chat interface — all powered by retrieval-augmented generation.*
 
-2. Report Ingestion Pipeline
-- Upload PDF + company + year
-- Background job execution with polling (`queued`, `running`, `done`, `error`)
-- Optional force re-index / re-summarize flags
-
-3. Section-wise Summaries
-- Returns summaries with labels and generation timestamp
-- Stored on disk for reuse
-- One-click re-summarize from cached retrieval artifacts
-
-4. Compare Years
-- Select two years for the same company
-- Get executive delta + section-level improvements/declines/new developments
-
-5. Translation
-- Translate all section summaries to supported languages
-
-6. Audio Generation
-- Convert one section or complete report summary into MP3
-- Served from backend static audio endpoint
-
-7. Chat with Reports
-- Ask questions against a specific company-year report
-- Persistent per-report session history
-- Clear chat history on demand
-
-8. Artifact Management
-- List all processed reports
-- Delete all artifacts for a company-year (summaries, vector store, chunks, chat history, audio)
+Upload a PDF. Get intelligence.
 
 ---
 
-## Tech Stack
+## ⚡ Feature Overview
 
-Frontend:
+<table>
+<thead>
+  <tr>
+    <th>🔧 Feature</th>
+    <th>📋 What it does</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td><strong>🔐 Authentication</strong></td>
+    <td>Local JWT sign-up/sign-in + Google OAuth with session restore and route protection</td>
+  </tr>
+  <tr>
+    <td><strong>📥 Report Ingestion</strong></td>
+    <td>Upload PDF with company & year; background pipeline with live status polling (<code>queued → running → done</code>)</td>
+  </tr>
+  <tr>
+    <td><strong>📑 Section Summaries</strong></td>
+    <td>Auto-generates summaries across <strong>8 report sections</strong>; cached for instant reuse</td>
+  </tr>
+  <tr>
+    <td><strong>📊 Year Comparison</strong></td>
+    <td>Cross-year delta analysis — improvements, declines, and new developments at section level</td>
+  </tr>
+  <tr>
+    <td><strong>🌐 Translation</strong></td>
+    <td>Translate all section summaries to any supported language instantly</td>
+  </tr>
+  <tr>
+    <td><strong>🎙️ Audio Narration</strong></td>
+    <td>Convert one section or the full report summary into an MP3 file</td>
+  </tr>
+  <tr>
+    <td><strong>💬 Chat Interface</strong></td>
+    <td>Ask natural-language questions grounded in the uploaded report, with persistent chat history</td>
+  </tr>
 
-- React 18
-- React Router
-- Axios
-- Vite
-
-Backend:
-
-- FastAPI
-- Uvicorn
-- LangChain ecosystem
-- ChromaDB
-- HuggingFace embeddings
-- Groq LLM integration
-- gTTS for audio
-- Deep Translator for multilingual support
+</tbody>
+</table>
 
 ---
 
-## Project Structure
+## 🏗️ Architecture
 
 ```
 ARS/
-	backend/
-		api/            # FastAPI route modules
-		auth/           # JWT + Google OAuth logic
-		core/           # Pipeline, summarizer, retriever, chat, translation, audio
-		data/           # Persisted app data (summaries, chunks, chroma, chat, audio, uploads)
-		main.py         # FastAPI app entrypoint
-	frontend/
-		src/pages/      # Login, Dashboard, ReportView, Compare
-		src/components/ # UI components by feature
-		src/api/        # Axios API client
-		vite.config.js  # Dev server + backend proxy
+├── 🖥️  backend/
+│   ├── api/            ← FastAPI route modules
+│   ├── auth/           ← JWT + Google OAuth logic
+│   ├── core/           ← Pipeline, summarizer, retriever, chat, translation, audio
+│   ├── data/           ← Persisted app data (summaries, chunks, chroma, chat, audio, uploads)
+│   └── main.py         ← FastAPI app entrypoint
+│
+└── 🌐  frontend/
+    ├── src/
+    │   ├── pages/      ← Login, Dashboard, ReportView, Compare
+    │   ├── components/ ← UI components by feature
+    │   └── api/        ← Axios API client
+    └── vite.config.js  ← Dev server + backend proxy
 ```
 
 ---
 
-## Prerequisites
+## 🛠️ Tech Stack
 
-- Python 3.10+ recommended
-- Node.js 18+ recommended
-- npm
-- Internet access for LLM, translation, and Google OAuth flows
-
----
-
-## Environment Variables
-
-Create `backend/.env` with the following values:
-
-| Variable | Required | Description |
-|---|---|---|
-| `GROQ_API_KEY` | Yes | API key used for report summarization/comparison/chat model calls |
-| `HF_API_KEY` | Optional (recommended) | Hugging Face access key for embedding model downloads |
-| `JWT_SECRET_KEY` | Yes | Secret used to sign/verify JWT tokens |
-| `FRONTEND_URL` | Yes | Frontend base URL (default: `http://localhost:5173`) |
-| `BACKEND_URL` | Yes | Backend base URL (default: `http://localhost:8000`) |
-| `GOOGLE_CLIENT_ID` | Optional | Needed only if using Google OAuth login |
-| `GOOGLE_CLIENT_SECRET` | Optional | Needed only if using Google OAuth login |
-
-Minimal local `.env` example:
-
-```env
-GROQ_API_KEY=your_groq_api_key
-HF_API_KEY=your_hf_api_key
-JWT_SECRET_KEY=replace_with_a_long_random_secret
-
-FRONTEND_URL=http://localhost:5173
-BACKEND_URL=http://localhost:8000
-
-GOOGLE_CLIENT_ID=your_google_client_id
-GOOGLE_CLIENT_SECRET=your_google_client_secret
-```
-
-If you do not need Google OAuth, local email/password authentication still works.
+| Layer | Technologies |
+|-------|-------------|
+| **Frontend** | React 18, React Router, Axios, Vite |
+| **Backend** | FastAPI, Uvicorn, LangChain ecosystem |
+| **AI / ML** | Groq LLM, HuggingFace Embeddings, ChromaDB |
+| **Utilities** | gTTS (audio), Deep Translator (multilingual) |
 
 ---
 
-## Installation
+## 🚀 Getting Started
 
-### 1) Clone and enter the project
+### Prerequisites
+
+Before you begin, make sure you have:
+
+- 🐍 **Python 3.10+**
+- 🟢 **Node.js 18+** & **npm**
+- 🌐 **Internet access** (for LLM, translation, and OAuth flows)
+
+---
+
+### Step 1 — Clone the Repository
 
 ```bash
 git clone <your-repository-url>
 cd ARS
 ```
 
-### 2) Backend setup
+---
+
+### Step 2 — Configure Environment Variables
+
+Create a `.env` file inside the `backend/` directory:
+
+```env
+# ── Required ─────────────────────────────────────────
+GROQ_API_KEY=your_groq_api_key
+JWT_SECRET_KEY=replace_with_a_long_random_secret
+
+FRONTEND_URL=http://localhost:5173
+BACKEND_URL=http://localhost:8000
+
+# ── Recommended ──────────────────────────────────────
+HF_API_KEY=your_hf_api_key
+
+# ── Optional (Google OAuth only) ─────────────────────
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+```
+
+> 💡 **Tip:** Google OAuth is entirely optional. Local email/password authentication works out of the box.
+
+<details>
+<summary>📋 Full Environment Variable Reference</summary>
+
+| Variable | Required | Description |
+|---|---|---|
+| `GROQ_API_KEY` | ✅ Yes | API key for summarization, comparison, and chat model calls |
+| `HF_API_KEY` | ⚡ Recommended | Hugging Face key for embedding model downloads |
+| `JWT_SECRET_KEY` | ✅ Yes | Secret used to sign/verify JWT tokens |
+| `FRONTEND_URL` | ✅ Yes | Frontend base URL (default: `http://localhost:5173`) |
+| `BACKEND_URL` | ✅ Yes | Backend base URL (default: `http://localhost:8000`) |
+| `GOOGLE_CLIENT_ID` | 🔘 Optional | Needed only for Google OAuth login |
+| `GOOGLE_CLIENT_SECRET` | 🔘 Optional | Needed only for Google OAuth login |
+
+</details>
+
+---
+
+### Step 3 — Backend Setup
 
 ```bash
 cd backend
 python -m venv venv
 ```
 
-Activate virtual environment:
+**Activate the virtual environment:**
 
-- Windows (PowerShell):
+```bash
+# macOS / Linux
+source venv/bin/activate
 
-```powershell
+# Windows (PowerShell)
 venv\Scripts\Activate
 ```
 
-- macOS/Linux:
-
-```bash
-source venv/bin/activate
-```
-
-Install dependencies:
+**Install dependencies:**
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 3) Frontend setup
+---
+
+### Step 4 — Frontend Setup
 
 ```bash
 cd ../frontend
@@ -190,106 +193,141 @@ npm install
 
 ---
 
-## Running the Project
+### Step 5 — Run the Application
 
-You need two terminals.
+Open **two terminals** and run each simultaneously:
 
-### Terminal A: Start backend
-
-From `ARS/backend`:
-
+**Terminal A — Backend**
 ```bash
+# From ARS/backend/
 uvicorn main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-Backend URLs:
-
-- API root: `http://localhost:8000/`
-- Swagger docs: `http://localhost:8000/docs`
-- ReDoc: `http://localhost:8000/redoc`
-
-### Terminal B: Start frontend
-
-From `ARS/frontend`:
-
+**Terminal B — Frontend**
 ```bash
+# From ARS/frontend/
 npm run dev
 ```
 
-Frontend URL:
+| Service | URL |
+|---------|-----|
+| 🌐 App | http://localhost:5173 |
+| 📡 API Root | http://localhost:8000/ |
+| 📖 Swagger Docs | http://localhost:8000/docs |
+| 📘 ReDoc | http://localhost:8000/redoc |
 
-- App: `http://localhost:5173`
-
-Vite proxies `/api` and `/audio-files` requests to the backend.
-
----
-
-## Typical User Flow
-
-1. Sign in (local account or Google OAuth).
-2. Upload annual report PDF on Dashboard with company and year.
-3. Wait for pipeline completion.
-4. Open report view to read section summaries.
-5. Optionally translate summaries, generate audio, or ask chat questions.
-6. Compare two years for the same company in Compare view.
-7. Use Resummarize when you want fresh summaries from cached artifacts.
+> Vite automatically proxies `/api` and `/audio-files` to the backend.
 
 ---
 
-## Data Persistence
+## 🗺️ Typical User Flow
 
-Generated artifacts are stored under `backend/data/`:
-
-- `summaries/` for summary JSON files
-- `chunks/` for chunk snapshots
-- `chroma_store/` for vector index collections
-- `chat_history/` for per-report conversations
-- `audio/` for generated MP3 files
-- `uploads/` for uploaded PDFs
-
-This makes repeated access fast and enables re-summarization without re-uploading files.
-
----
-
-## Main API Groups
-
-- `/auth` - sign-up/sign-in, Google OAuth, current user
-- `/reports` - list reports, delete report artifacts
-- `/pipeline` - upload + run processing job, poll status
-- `/summaries` - fetch summaries, re-summarize cached report
-- `/translate` - get supported languages, translate summaries
-- `/audio` - generate summary audio files
-- `/compare` - cross-year delta analysis
-- `/chat` - ask report questions, clear chat history
+```
+1. 🔑  Sign in  →  local account or Google OAuth
+        │
+2. 📤  Upload   →  annual report PDF with company name & year
+        │
+3. ⏳  Wait     →  pipeline runs in background (queued → running → done)
+        │
+4. 📖  Read     →  explore 8 section-wise summaries in Report View
+        │
+5. ✨  Enhance  →  translate · generate audio · ask chat questions
+        │
+6. 📊  Compare  →  select two years → get delta insights
+        │
+7. 🔄  Refresh  →  re-summarize from cached artifacts anytime
+```
 
 ---
 
-## Troubleshooting
+## 💾 Data Persistence
 
-1. Frontend cannot reach backend
+All generated artifacts are stored under `backend/data/`:
+
+```
+backend/data/
+├── 📝 summaries/       ← Section summary JSON files
+├── 🧩 chunks/          ← Chunked document snapshots
+├── 🔍 chroma_store/    ← Vector index collections
+├── 💬 chat_history/    ← Per-report conversation logs
+├── 🔊 audio/           ← Generated MP3 narrations
+└── 📄 uploads/         ← Original uploaded PDFs
+```
+
+> This makes repeated access fast and enables re-summarization without re-uploading files.
+
+---
+
+## 🔌 API Reference
+
+| Group | Endpoints |
+|-------|-----------|
+| `/auth` | Sign-up, sign-in, Google OAuth, current user |
+| `/reports` | List reports, delete report artifacts |
+| `/pipeline` | Upload + run processing job, poll job status |
+| `/summaries` | Fetch summaries, re-summarize cached report |
+| `/translate` | Get supported languages, translate summaries |
+| `/audio` | Generate and serve MP3 summary audio |
+| `/compare` | Cross-year delta analysis |
+| `/chat` | Ask report questions, clear chat history |
+
+---
+
+## 🩺 Troubleshooting
+
+<details>
+<summary>🔴 Frontend cannot reach backend</summary>
+
 - Ensure backend runs on `http://localhost:8000`
 - Ensure frontend runs on `http://localhost:5173`
 - Confirm Vite proxy configuration in `frontend/vite.config.js`
+</details>
 
-2. `401 Unauthorized` errors
-- Token may be expired/invalid; sign in again
-- Confirm `JWT_SECRET_KEY` is set and stable
+<details>
+<summary>🔴 401 Unauthorized errors</summary>
 
-3. Pipeline or model failures
-- Verify `GROQ_API_KEY`
+- Token may be expired or invalid — sign in again
+- Confirm `JWT_SECRET_KEY` is set and hasn't changed between restarts
+</details>
+
+<details>
+<summary>🔴 Pipeline or model failures</summary>
+
+- Verify `GROQ_API_KEY` is correct and active
 - Confirm internet connectivity for external model services
+</details>
 
-4. Google OAuth fails
+<details>
+<summary>🔴 Google OAuth not working</summary>
+
 - Ensure `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` are correct
-- Add exact callback URL in Google console: `http://localhost:8000/auth/callback`
+- Add the exact callback URL in your Google Console:
+  ```
+  http://localhost:8000/auth/callback
+  ```
+</details>
 
-5. Audio generation issues
-- Ensure translation/language code is valid and summary text exists
+<details>
+<summary>🔴 Audio generation issues</summary>
+
+- Ensure the target language code is valid
+- Verify that summary text exists for the selected section
+</details>
 
 ---
 
-## Notes
+## ⚠️ Important Notes
 
-- The in-memory pipeline job store resets on backend restart.
-- This project is suitable for local development and demos; production deployment should add persistent job queues, hardened secret management, and stronger operational safeguards.
+> **Pipeline Job Store** — The in-memory job store resets on every backend restart. Re-submit any interrupted jobs after restarting.
 
+> **Production Readiness** — This project is optimized for local development and demos. For production, add: persistent job queues, hardened secret management, rate limiting, and stronger operational safeguards.
+
+---
+
+<div align="center">
+
+Built with 🤖 AI · ⚡ Speed · 📊 Purpose
+
+*ARS — because annual reports shouldn't take all year.*
+
+</div>
